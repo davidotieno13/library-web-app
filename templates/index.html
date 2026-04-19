@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library System</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        form {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f4f4f4;
+        }
+
+        input {
+            margin: 5px;
+            padding: 5px;
+        }
+
+        button {
+            padding: 6px 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📚 Library System</h1>
+
+<h2>Add Book</h2>
+{% if session["user"] == "admin" %}
+
+<form action="/add" method="post">
+    <input name="title" placeholder="Title" required>
+    <input name="author" placeholder="Author" required>
+    <input name="subject" placeholder="Subject" required>
+    <input name="shelf" placeholder="Shelf">
+    <input name="row" placeholder="Row">
+    <input name="position" placeholder="Position">
+    <button type="submit">Add Book</button>
+</form>
+{% endif %}
+
+<h2>Book List</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Subject</th>
+        <th>Shelf</th>
+        <th>Row</th>
+        <th>Position</th>
+        <th>Available</th>
+    </tr>
+
+    {% for book in books %}
+    <tr>
+        <td>{{ book[0] }}</td>
+        <td>{{ book[1] }}</td>
+        <td>{{ book[2] }}</td>
+        <td>{{ book[3] }}</td>
+        <td>{{ book[4] }}</td>
+        <td>{{ book[5] }}</td>
+        <td>{{ book[6] }}</td>
+        <td>{{ book[7] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+
+<a href="/logout">Logout</a>
+
+<h1>Library System</h1>
+</html>
