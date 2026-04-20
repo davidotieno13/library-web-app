@@ -13,7 +13,7 @@ users = {
     "user": "1111"
 }
 
-# ---------------- INIT DB ----------------
+# ---------------- DATABASE ----------------
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -23,11 +23,14 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
             author TEXT,
-            subject TEXT,
-            shelf TEXT,
-            row TEXT,
-            position TEXT,
-            available TEXT
+            isbn TEXT,
+            publisher TEXT,
+            year TEXT,
+            edition TEXT,
+            category TEXT,
+            copies INTEGER,
+            shelf_code TEXT,
+            available_copies INTEGER
         )
     """)
 
@@ -58,7 +61,7 @@ def logout():
     return redirect("/login")
 
 
-# ---------------- HOME ----------------
+# ---------------- HOME / SEARCH ----------------
 @app.route("/", methods=["GET"])
 def home():
     if "user" not in session:
@@ -72,8 +75,11 @@ def home():
     if search:
         cursor.execute("""
             SELECT * FROM books
-            WHERE title LIKE ? OR author LIKE ? OR subject LIKE ?
-        """, (f"%{search}%", f"%{search}%", f"%{search}%"))
+            WHERE title LIKE ?
+            OR author LIKE ?
+            OR isbn LIKE ?
+            OR category LIKE ?
+        """, (f"%{search}%", f"%{search}%", f"%{search}%", f"%{search}%"))
     else:
         cursor.execute("SELECT * FROM books")
 
@@ -93,16 +99,22 @@ def add():
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT INTO books (title, author, subject, shelf, row, position, available)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO books (
+            title, author, isbn, publisher, year,
+            edition, category, copies, shelf_code, available_copies
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         request.form["title"],
         request.form["author"],
-        request.form["subject"],
-        "",
-        "",
-        "",
-        "True"
+        request.form["isbn"],
+        request.form["publisher"],
+        request.form["year"],
+        request.form["edition"],
+        request.form["category"],
+        request.form["copies"],
+        request.form["shelf_code"],
+        request.form["copies"]
     ))
 
     conn.commit()
@@ -111,7 +123,7 @@ def add():
     return redirect("/")
 
 
-# ---------------- START ----------------
+# ---------------- START APP ----------------
 if __name__ == "__main__":
     init_db()
     port = int(os.environ.get("PORT", 5000))
