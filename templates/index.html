@@ -2,28 +2,68 @@
 <html>
 <head>
     <title>Library System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+
+        .form-box input {
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Library System</h1>
+<div class="top">
+    <h2>📚 Library System</h2>
+    <a href="/logout">Logout</a>
+</div>
 
-<a href="/logout">Logout</a>
-
+<!-- ADD BOOK -->
 {% if session["user"] == "admin" %}
-<form method="POST" action="/add">
-    <input name="title" placeholder="Title">
-    <input name="author" placeholder="Author">
-    <button type="submit">Add</button>
-</form>
+<div class="form-box">
+    <form method="POST" action="/add">
+        <input name="title" placeholder="Title">
+        <input name="author" placeholder="Author">
+        <input name="subject" placeholder="Subject">
+        <button type="submit">Add</button>
+    </form>
+</div>
 {% endif %}
 
-<hr>
+<!-- SEARCH -->
 <form method="GET" action="/">
-    <input type="text" name="search" placeholder="Search books..." style="padding:5px; width:200px;">
+    <input name="search" placeholder="Search books...">
     <button type="submit">Search</button>
 </form>
-<table border="1">
+
+<!-- TABLE -->
+<table>
     <tr>
         <th>Title</th>
         <th>Author</th>
