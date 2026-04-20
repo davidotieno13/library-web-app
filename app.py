@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
+import os
 
 # ---------------- APP SETUP ----------------
 app = Flask(__name__)
@@ -35,7 +36,7 @@ def init_db():
     conn.close()
 
 
-# ---------------- LOGIN ROUTE ----------------
+# ---------------- LOGIN ----------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -50,6 +51,8 @@ def login():
 
     return render_template("login.html")
 
+
+# ---------------- LOGOUT ----------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
@@ -67,15 +70,15 @@ def home():
 
     search = request.args.get("search")
 
-if search:
-    cursor.execute("""
-        SELECT * FROM books
-        WHERE title LIKE ? OR author LIKE ? OR subject LIKE ?
-    """, (f"%{search}%", f"%{search}%", f"%{search}%"))
-else:
-    cursor.execute("SELECT * FROM books")
-    books = cursor.fetchall()
+    if search:
+        cursor.execute("""
+            SELECT * FROM books
+            WHERE title LIKE ? OR author LIKE ? OR subject LIKE ?
+        """, (f"%{search}%", f"%{search}%", f"%{search}%"))
+    else:
+        cursor.execute("SELECT * FROM books")
 
+    books = cursor.fetchall()
     conn.close()
 
     return render_template("index.html", books=books)
@@ -86,6 +89,7 @@ else:
 def add():
     if session.get("user") != "admin":
         return "Access Denied"
+
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
@@ -107,8 +111,6 @@ def add():
 
     return redirect("/")
 
-
-import os
 
 # ---------------- START APP ----------------
 if __name__ == "__main__":
