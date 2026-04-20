@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Library System</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -10,71 +9,59 @@
 
 <div class="container mt-4">
 
-    <div class="d-flex justify-content-between mb-3">
-        <h3>📚 Library System</h3>
-        <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
-    </div>
+<h2>📚 Library System</h2>
+<a href="/logout" class="btn btn-danger btn-sm">Logout</a>
 
-    <!-- ADD BOOK -->
-    {% if session["user"] == "admin" %}
-    <div class="card p-3 mb-3">
-        <h5>Add Book</h5>
+<hr>
 
-        <form method="POST" action="/add" class="row g-2">
+<!-- ADD -->
+{% if session["user"] == "admin" %}
+<form method="POST" action="/add" class="row g-2">
+    <input class="col" name="title" placeholder="Title">
+    <input class="col" name="author" placeholder="Author">
+    <input class="col" name="isbn" placeholder="ISBN">
+    <input class="col" name="publisher" placeholder="Publisher">
+    <input class="col" name="year" placeholder="Year">
+    <input class="col" name="edition" placeholder="Edition">
+    <input class="col" name="category" placeholder="Category">
+    <input class="col" name="copies" placeholder="Copies">
+    <input class="col" name="shelf" placeholder="Shelf">
 
-            <input class="col" name="title" placeholder="Title">
-            <input class="col" name="author" placeholder="Author">
-            <input class="col" name="isbn" placeholder="ISBN">
-            <input class="col" name="publisher" placeholder="Publisher">
-            <input class="col" name="year" placeholder="Year">
-            <input class="col" name="edition" placeholder="Edition">
-            <input class="col" name="category" placeholder="Category">
-            <input class="col" name="copies" placeholder="Copies">
-            <input class="col" name="shelf_code" placeholder="Shelf Code">
+    <button class="btn btn-primary mt-2">Add Book</button>
+</form>
+{% endif %}
 
-            <button class="btn btn-primary mt-2">Add Book</button>
-        </form>
-    </div>
-    {% endif %}
+<hr>
 
-    <!-- SEARCH -->
-    <form method="GET" class="mb-3">
-        <input class="form-control" name="search" placeholder="Search by title, author, ISBN, category">
-    </form>
+<!-- SEARCH -->
+<form method="GET">
+    <input name="search" class="form-control" placeholder="Search books...">
+</form>
 
-    <!-- TABLE -->
-    <div class="card p-3">
+<hr>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>ISBN</th>
-                    <th>Category</th>
-                    <th>Copies</th>
-                    <th>Available</th>
-                    <th>Shelf</th>
-                </tr>
-            </thead>
+<!-- TABLE -->
+<table class="table table-striped">
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>ISBN</th>
+        <th>Category</th>
+        <th>Available</th>
+        <th>Action</th>
+    </tr>
 
-            <tbody>
-                {% for book in books %}
-                <tr>
-                    <td>{{ book[1] }}</td>
-                    <td>{{ book[2] }}</td>
-                    <td>{{ book[3] }}</td>
-                    <td>{{ book[7] }}</td>
-                    <td>{{ book[8] }}</td>
-                    <td>{{ book[10] }}</td>
-                    <td>{{ book[9] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-
-        </table>
-
-    </div>
+    {% for b in books %}
+    <tr>
+        <td>{{ b[1] }}</td>
+        <td>{{ b[2] }}</td>
+        <td>{{ b[3] }}</td>
+        <td>{{ b[7] }}</td>
+        <td>{{ b[10] }}</td>
+        <td><a href="/borrow/{{ b[0] }}" class="btn btn-sm btn-success">Borrow</a></td>
+    </tr>
+    {% endfor %}
+</table>
 
 </div>
 
