@@ -2,9 +2,8 @@ from flask import Flask, render_template, request, redirect, session
 import sqlite3
 import os
 
-# ---------------- APP SETUP ----------------
 app = Flask(__name__)
-app.secret_key = "library_secret_key"
+app.secret_key = os.environ.get("SECRET_KEY", "library_secret_key")
 
 DB_NAME = "library.db"
 
@@ -14,7 +13,7 @@ users = {
     "user": "1111"
 }
 
-# ---------------- DATABASE SETUP ----------------
+# ---------------- INIT DB ----------------
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -59,7 +58,7 @@ def logout():
     return redirect("/login")
 
 
-# ---------------- HOME PAGE ----------------
+# ---------------- HOME ----------------
 @app.route("/", methods=["GET"])
 def home():
     if "user" not in session:
@@ -100,9 +99,9 @@ def add():
         request.form["title"],
         request.form["author"],
         request.form["subject"],
-        request.form["shelf"],
-        request.form["row"],
-        request.form["position"],
+        "",
+        "",
+        "",
         "True"
     ))
 
@@ -112,8 +111,8 @@ def add():
     return redirect("/")
 
 
-# ---------------- START APP ----------------
+# ---------------- START ----------------
 if __name__ == "__main__":
     init_db()
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
