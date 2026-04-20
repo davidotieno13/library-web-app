@@ -9,44 +9,54 @@
             margin: 30px;
         }
 
-        .top {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        .section {
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 6px;
+            margin: 4px;
+        }
+
+        button {
+            padding: 6px 10px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         th, td {
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 8px;
         }
 
         th {
-            background: #f2f2f2;
-        }
-
-        .form-box input {
-            margin: 5px;
-            padding: 5px;
+            background: #f0f0f0;
         }
     </style>
 </head>
 
 <body>
 
-<div class="top">
+<!-- HEADER -->
+<div class="header">
     <h2>📚 Library System</h2>
     <a href="/logout">Logout</a>
 </div>
 
-<!-- ADD BOOK -->
+<!-- ADD BOOK (ADMIN ONLY) -->
 {% if session["user"] == "admin" %}
-<div class="form-box">
+<div class="section">
+    <h3>Add Book</h3>
     <form method="POST" action="/add">
         <input name="title" placeholder="Title">
         <input name="author" placeholder="Author">
@@ -57,27 +67,34 @@
 {% endif %}
 
 <!-- SEARCH -->
-<form method="GET" action="/">
-    <input name="search" placeholder="Search books...">
-    <button type="submit">Search</button>
-</form>
+<div class="section">
+    <h3>Search</h3>
+    <form method="GET" action="/">
+        <input name="search" placeholder="Search books...">
+        <button type="submit">Search</button>
+    </form>
+</div>
 
 <!-- TABLE -->
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Subject</th>
-    </tr>
+<div class="section">
+    <h3>Books List</h3>
 
-    {% for book in books %}
-    <tr>
-        <td>{{ book[1] }}</td>
-        <td>{{ book[2] }}</td>
-        <td>{{ book[3] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Subject</th>
+        </tr>
+
+        {% for book in books %}
+        <tr>
+            <td>{{ book[1] }}</td>
+            <td>{{ book[2] }}</td>
+            <td>{{ book[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 
 </body>
 </html>
