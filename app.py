@@ -57,7 +57,7 @@ def logout():
 
 
 # ---------------- HOME PAGE ----------------
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
     if "user" not in session:
         return redirect("/login")
@@ -65,6 +65,14 @@ def home():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
+    search = request.args.get("search")
+
+if search:
+    cursor.execute("""
+        SELECT * FROM books
+        WHERE title LIKE ? OR author LIKE ? OR subject LIKE ?
+    """, (f"%{search}%", f"%{search}%", f"%{search}%"))
+else:
     cursor.execute("SELECT * FROM books")
     books = cursor.fetchall()
 
